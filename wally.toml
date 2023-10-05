@@ -1,0 +1,12 @@
+[package]
+name = "jackc/cloudent-project"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+React = "jsdotlua/react@17.0.2"
+Rodux = "roblox/rodux@3.0.0"
+Immut = "solarhorizon/immut@0.4.4"
+t = "osyrisrblx/t@3.0.0"
+ReactRoblox = "jsdotlua/react-roblox@17.0.2"
