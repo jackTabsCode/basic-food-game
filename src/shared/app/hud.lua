@@ -4,13 +4,13 @@ local React = require(ReplicatedStorage.Packages.React)
 local ReactRodux = require(ReplicatedStorage.Packages.ReactRodux)
 local e = React.createElement
 
-local selectLocalHunger = require(script.Parent.Parent.selectors.hunger)
+local hungerSelectors = require(script.Parent.Parent.selectors.hunger)
 
 function Hud()
-	local hunger = ReactRodux.useSelector(selectLocalHunger)
+	local hunger = ReactRodux.useSelector(hungerSelectors.selectLocalHunger)
 
 	return e("ScreenGui", {}, {
-		e("TextLabel", {
+		TextLabel = e("TextLabel", {
 			AutomaticSize = Enum.AutomaticSize.XY,
 			Position = UDim2.fromScale(0.5, 0.5),
 			Text = tostring(hunger),

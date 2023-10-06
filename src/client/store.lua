@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Rodux = require(ReplicatedStorage.Packages.Rodux)
-local Sift = require(ReplicatedStorage.Packages.Sift)
 
 local sharedReducers = require(ReplicatedStorage.shared.reducers)
 

@@ -10,9 +10,9 @@ local ReactRoblox = require(ReplicatedStorage.Packages.ReactRoblox)
 
 local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local App = require(script.Parent:WaitForChild("app"))
+local store = require(script.Parent:WaitForChild("store"))
+
+local App = require(ReplicatedStorage.shared.app)
 
 local root = ReactRoblox.createRoot(Instance.new("Folder"))
-root:render(ReactRoblox.createPortal(e(App), PlayerGui))
-
-print("Hey")
+root:render(ReactRoblox.createPortal(e(App, { store = store }), PlayerGui))
