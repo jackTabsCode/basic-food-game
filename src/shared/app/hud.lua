@@ -9,7 +9,10 @@ local hungerSelectors = require(script.Parent.Parent.selectors.hunger)
 function Hud()
 	local hunger = ReactRodux.useSelector(hungerSelectors.selectLocalHunger)
 
-	return e("ScreenGui", {}, {
+	return e("ScreenGui", {
+		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
+	}, {
 		TextLabel = e("TextLabel", {
 			AutomaticSize = Enum.AutomaticSize.XY,
 			Position = UDim2.fromScale(0.5, 0.5),

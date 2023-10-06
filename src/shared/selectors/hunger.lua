@@ -3,17 +3,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local SharedState = require(ReplicatedStorage.shared.types.state)
 
-local defaults = require(ReplicatedStorage.shared.defaults)
-
-function selectCharacter(name: string)
-	return function(state: SharedState.CommonState)
-		return if state.players.character[name] then state.players.character[name] else defaults.character
-	end
-end
+local selectCharacter = require(script.Parent.character).selectCharacter
 
 function selectHunger(name: string)
 	return function(state: SharedState.CommonState)
-		return selectCharacter(name)(state).hunger
+		local character = selectCharacter(name)(state)
+		return if character then character.hunger else 0
 	end
 end
 

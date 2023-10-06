@@ -19,4 +19,14 @@ export type PlayerLeftAction = {
 	username: string,
 }
 
+export type CharacterSpawnedAction = {
+	type: "character/spawned",
+	username: string,
+}
+
+export type CharacterDiedAction = {
+	type: "character/died",
+	username: string,
+}
+
 return {}
