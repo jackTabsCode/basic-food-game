@@ -4,6 +4,7 @@ local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
 
 local Hunger = require(script.Parent.hunger)
+local Inventory = require(script.Parent.inventory)
 
 function Hud()
 	return e("ScreenGui", {
@@ -11,6 +12,7 @@ function Hud()
 		IgnoreGuiInset = true,
 	}, {
 		Hunger = e(Hunger),
+		Inventory = e(Inventory),
 	})
 end
 
