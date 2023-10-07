@@ -46,7 +46,13 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 			return
 		end
 
-		-- add food to inventory
+		food:Destroy()
+
+		store:dispatch({
+			type = "inventory/foodAdded",
+			username = self.model.Name,
+			foodType = foodType,
+		})
 	end))
 
 	self.maid:giveTask(store.changed:connect(function(newState, oldState)
