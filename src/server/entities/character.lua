@@ -2,14 +2,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
 local FoodTypes = require(ReplicatedStorage.shared.types.food)
+local foodSettings = require(ReplicatedStorage.shared.settings.food)
 
 local pickupFoodEvent = ReplicatedStorage.shared.events.pickupFood
+local consumeFoodEvent = ReplicatedStorage.shared.events.consumeFood
 
 local Maid = require(ReplicatedStorage.Packages.Maid)
 local t = require(ReplicatedStorage.Packages.t)
 
 local store = require(script.Parent.Parent.store)
 local selectHunger = require(ReplicatedStorage.shared.selectors.hunger).selectHunger
+local selectInventory = require(ReplicatedStorage.shared.selectors.inventory).selectInventory
 
 local CharacterEntity = {}
 CharacterEntity.__index = CharacterEntity
@@ -32,6 +35,7 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 	self.maid:giveTask(RunService.Heartbeat:Connect(function()
 		self:Heartbeat()
 	end))
+
 	self.maid:giveTask(pickupFoodEvent.OnServerEvent:Connect(function(player, food)
 		if player.Name ~= self.model.Name or not t.instanceIsA("BasePart")(food) or not food:HasTag("food") then
 			return
@@ -50,6 +54,23 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 
 		store:dispatch({
 			type = "inventory/foodAdded",
+			username = self.model.Name,
+			foodType = foodType,
+		})
+	end))
+
+	self.maid:giveTask(consumeFoodEvent.OnServerEvent:Connect(function(player, foodType)
+		if player.Name ~= self.model.Name or not t.keyOf(foodSettings)(foodType) then
+			return
+		end
+
+		local inventory = selectInventory(player.Name)(store:getState())
+		if inventory[foodType] <= 0 then
+			return
+		end
+
+		store:dispatch({
+			type = "inventory/foodConsumed",
 			username = self.model.Name,
 			foodType = foodType,
 		})
