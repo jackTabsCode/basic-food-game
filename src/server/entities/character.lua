@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local FoodTypes = require(ReplicatedStorage.shared.types.food)
+
 local pickupFoodEvent = ReplicatedStorage.shared.events.pickupFood
 
 local Maid = require(ReplicatedStorage.Packages.Maid)
@@ -31,11 +33,20 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 		self:Heartbeat()
 	end))
 	self.maid:giveTask(pickupFoodEvent.OnServerEvent:Connect(function(player, food)
-		if player.Name ~= self.model.Name then
+		if player.Name ~= self.model.Name or not t.instanceIsA("BasePart")(food) or not food:HasTag("food") then
 			return
 		end
 
-		-- DNF
+		local foodType = food.Name :: FoodTypes.FoodType
+
+		local foodPos = food.Position
+		local rootPos = self.rootPart.Position
+
+		if (foodPos - rootPos).Magnitude > 10 then
+			return
+		end
+
+		-- add food to inventory
 	end))
 
 	self.maid:giveTask(store.changed:connect(function(newState, oldState)
