@@ -12,7 +12,10 @@ local inventoryReducer = Rodux.createReducer({}, {
 	["character/spawned"] = function(state: StateTypes.InventoryState, action: ActionTypes.PlayerJoinedAction)
 		local inventory = {}
 		Sift.Dictionary.map(foodSettings, function(_, foodType)
-			inventory[foodType] = 0
+			inventory[foodType] = {
+				amount = 0,
+				equipped = false,
+			}
 		end)
 
 		return Sift.Dictionary.merge(state, {
@@ -30,7 +33,10 @@ local inventoryReducer = Rodux.createReducer({}, {
 		return Sift.Dictionary.map(state, function(value, key)
 			if key == action.username then
 				return Sift.Dictionary.merge(value, {
-					[action.foodType] = value[action.foodType] + 1,
+					[action.foodType] = {
+						amount = value[action.foodType].amount + 1,
+						equipped = value[action.foodType].equipped,
+					},
 				})
 			end
 			return value
@@ -41,8 +47,37 @@ local inventoryReducer = Rodux.createReducer({}, {
 		return Sift.Dictionary.map(state, function(value, key)
 			if key == action.username then
 				return Sift.Dictionary.merge(value, {
-					[action.foodType] = value[action.foodType] - 1,
+					[action.foodType] = {
+						amount = value[action.foodType].amount - 1,
+						equipped = value[action.foodType].amount - 1 > 0 and value[action.foodType].equipped or false,
+					},
 				})
+			end
+			return value
+		end)
+	end,
+
+	["inventory/foodEquipped"] = function(state: StateTypes.InventoryState, action: ActionTypes.FoodEquippedAction)
+		return Sift.Dictionary.map(state, function(value, key)
+			if key == action.username then
+				return Sift.Dictionary.map(value, function(food, foodType)
+					return Sift.Dictionary.merge(food, {
+						equipped = action.foodType == foodType,
+					})
+				end)
+			end
+			return value
+		end)
+	end,
+
+	["inventory/foodUnequipped"] = function(state: StateTypes.InventoryState, action: ActionTypes.FoodUnequippedAction)
+		return Sift.Dictionary.map(state, function(value, key)
+			if key == action.username then
+				return Sift.Dictionary.map(value, function(food)
+					return Sift.Dictionary.merge(food, {
+						equipped = false,
+					})
+				end)
 			end
 			return value
 		end)

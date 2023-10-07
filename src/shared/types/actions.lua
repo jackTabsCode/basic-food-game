@@ -16,6 +16,17 @@ export type FoodConsumedAction = {
 	foodType: FoodTypes.FoodType,
 }
 
+export type FoodEquippedAction = {
+	type: "inventory/foodEquipped",
+	username: string,
+	foodType: FoodTypes.FoodType,
+}
+export type FoodUnequippedAction = {
+	type: "inventory/foodUnequipped",
+	username: string,
+	foodType: FoodTypes.FoodType,
+}
+
 export type PlayerJoinedAction = {
 	type: "players/joined",
 	username: string,

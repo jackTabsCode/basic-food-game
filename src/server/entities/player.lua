@@ -16,7 +16,7 @@ function PlayerEntity.new(player: Player)
 	self.maid = Maid.new()
 
 	self.maid:giveTask(player.CharacterAdded:Connect(function(model)
-		self.character = CharacterEntity.new(model, function()
+		self.character = CharacterEntity.new(player, model, function()
 			self:CharacterDied()
 		end)
 	end))

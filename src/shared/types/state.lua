@@ -5,7 +5,10 @@ export type Character = {
 }
 
 export type Inventory = {
-	[FoodTypes.FoodType]: number,
+	[FoodTypes.FoodType]: {
+		amount: number,
+		equipped: boolean,
+	},
 }
 
 export type CharacterState = { [string]: Character }

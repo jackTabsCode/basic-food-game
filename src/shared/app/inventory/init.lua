@@ -12,8 +12,8 @@ local Food = require(script.food)
 function Inventory()
 	local inventory = ReactRodux.useSelector(inventorySelectors.selectLocalInventory)
 
-	local food = Sift.Dictionary.map(inventory, function(amount, foodType)
-		return e(Food, { foodType = foodType, amount = amount })
+	local food = Sift.Dictionary.map(inventory, function(food, foodType)
+		return e(Food, { foodType = foodType, equipped = food.equipped, amount = food.amount })
 	end)
 
 	return e("Frame", {

@@ -6,11 +6,13 @@ local e = React.createElement
 local FoodTypes = require(ReplicatedStorage.shared.types.food)
 local foodSettings = require(ReplicatedStorage.shared.settings.food)
 
-local consumeFoodEvent = ReplicatedStorage.shared.events.consumeFood
+local equipFoodEvent = ReplicatedStorage.shared.events.equipFood
+local unequipFoodEvent = ReplicatedStorage.shared.events.unequipFood
 
 type Props = {
 	foodType: FoodTypes.FoodType,
 	amount: number,
+	equipped: boolean,
 }
 
 function Food(props: Props)
@@ -24,7 +26,15 @@ function Food(props: Props)
 		TextWrapped = true,
 		Visible = props.amount > 0,
 		[React.Event.Activated] = function()
-			consumeFoodEvent:FireServer(props.foodType)
+			if props.amount <= 0 then
+				return
+			end
+
+			if props.equipped then
+				unequipFoodEvent:FireServer(props.foodType)
+			else
+				equipFoodEvent:FireServer(props.foodType)
+			end
 		end,
 	})
 end
