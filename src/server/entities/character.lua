@@ -1,7 +1,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local pickupFoodEvent = ReplicatedStorage.shared.events.pickupFood
+
 local Maid = require(ReplicatedStorage.Packages.Maid)
+local t = require(ReplicatedStorage.Packages.t)
 
 local store = require(script.Parent.Parent.store)
 local selectHunger = require(ReplicatedStorage.shared.selectors.hunger).selectHunger
@@ -15,8 +18,9 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 	self.model = model
 
 	self.humanoid = model:WaitForChild("Humanoid", 10) :: Humanoid | nil
+	self.rootPart = model:WaitForChild("HumanoidRootPart", 10) :: BasePart | nil
 	if not self.humanoid then
-		error(`CharacterEntity could not find Humanoid in {model.Name}`, 2)
+		error(`CharacterEntity could not validate {model.Name}`, 2)
 	end
 
 	self.maid = Maid.new()
@@ -25,6 +29,13 @@ function CharacterEntity.new(model: Model, onDied: () -> nil)
 
 	self.maid:giveTask(RunService.Heartbeat:Connect(function()
 		self:Heartbeat()
+	end))
+	self.maid:giveTask(pickupFoodEvent.OnServerEvent:Connect(function(player, food)
+		if player.Name ~= self.model.Name then
+			return
+		end
+
+		-- DNF
 	end))
 
 	self.maid:giveTask(store.changed:connect(function(newState, oldState)
