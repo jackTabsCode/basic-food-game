@@ -17,7 +17,7 @@ function spawnFood()
 	local location = baseplate.Position
 		+ Vector3.new(
 			math.random(-baseplate.Size.X / 2, baseplate.Size.X / 2),
-			15,
+			math.random(30, 60),
 			math.random(-baseplate.Size.Z / 2, baseplate.Size.Z / 2)
 		)
 
