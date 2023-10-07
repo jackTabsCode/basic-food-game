@@ -9,6 +9,9 @@
 			},
 			"Packages": {
 				"$path": "Packages"
+			},
+			"food": {
+				"$path": "assets/food"
 			}
 		},
 
