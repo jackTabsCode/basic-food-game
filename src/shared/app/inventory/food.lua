@@ -1,4 +1,6 @@
+local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
 local React = require(ReplicatedStorage.Packages.React)
 local e = React.createElement
@@ -8,6 +10,7 @@ local foodSettings = require(ReplicatedStorage.shared.settings.food)
 
 local equipFoodEvent = ReplicatedStorage.shared.events.equipFood
 local unequipFoodEvent = ReplicatedStorage.shared.events.unequipFood
+local consumeFoodEvent = ReplicatedStorage.shared.events.consumeFood
 
 type Props = {
 	foodType: FoodTypes.FoodType,
@@ -17,6 +20,20 @@ type Props = {
 
 function Food(props: Props)
 	local settings = foodSettings[props.foodType]
+
+	React.useEffect(function()
+		if props.equipped then
+			ContextActionService:BindAction("consume", function(_, inputState)
+				if inputState == Enum.UserInputState.Begin then
+					consumeFoodEvent:FireServer(props.foodType)
+				end
+			end, false, Enum.UserInputType.MouseButton1)
+		end
+
+		return function()
+			ContextActionService:UnbindAction("consume")
+		end
+	end, { props.equipped })
 
 	return e("TextButton", {
 		Size = UDim2.fromOffset(0, 50),
