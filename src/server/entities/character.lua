@@ -1,6 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local StateTypes = require(ReplicatedStorage.shared.types.state)
+
 local FoodTypes = require(ReplicatedStorage.shared.types.food)
 local foodSettings = require(ReplicatedStorage.shared.settings.food)
 
@@ -32,6 +34,7 @@ function CharacterEntity.new(host: Player, model: Model, onDied: () -> nil)
 	end
 
 	self.tools = {}
+	self.lastHungerDeplete = os.clock()
 
 	self.maid = Maid.new()
 
@@ -42,115 +45,32 @@ function CharacterEntity.new(host: Player, model: Model, onDied: () -> nil)
 	end))
 
 	self.maid:giveTask(pickupFoodEvent.OnServerEvent:Connect(function(player, food)
-		if player.Name ~= self.host.Name or not t.instanceIsA("BasePart")(food) or not food:HasTag("food") then
-			return
+		if player.Name == self.host.Name then
+			self:OnPickupFood(food)
 		end
-
-		local foodType = food.Name :: FoodTypes.FoodType
-
-		local foodPos = food.Position
-		local rootPos = self.rootPart.Position
-
-		if (foodPos - rootPos).Magnitude > 10 then
-			return
-		end
-
-		food:Destroy()
-
-		store:dispatch({
-			type = "inventory/foodAdded",
-			username = self.host.Name,
-			foodType = foodType,
-		})
 	end))
 
 	self.maid:giveTask(consumeFoodEvent.OnServerEvent:Connect(function(player, foodType)
-		if player.Name ~= self.host.Name or not t.keyOf(foodSettings)(foodType) then
-			return
+		if player.Name == self.host.Name then
+			self:ConsumeFood(foodType)
 		end
-
-		local inventory = selectInventory(player.Name)(store:getState())
-		local food = inventory[foodType]
-		if food.amount <= 0 or not food.equipped then
-			return
-		end
-
-		store:dispatch({
-			type = "inventory/foodConsumed",
-			username = self.host.Name,
-			foodType = foodType,
-		})
 	end))
 
 	self.maid:giveTask(equipFoodEvent.OnServerEvent:Connect(function(player, foodType)
-		if player.Name ~= self.host.Name or not t.keyOf(foodSettings)(foodType) then
-			return
+		if player.Name == self.host.Name then
+			self:EquipFood(foodType)
 		end
-
-		local inventory = selectInventory(player.Name)(store:getState())
-		local food = inventory[foodType]
-		if food.amount <= 0 or food.equipped then
-			return
-		end
-
-		store:dispatch({
-			type = "inventory/foodEquipped",
-			username = self.host.Name,
-			foodType = foodType,
-		})
 	end))
 
 	self.maid:giveTask(unequipFoodEvent.OnServerEvent:Connect(function(player, foodType)
-		if player.Name ~= self.host.Name or not t.keyOf(foodSettings)(foodType) then
-			return
+		if player.Name == self.host.Name then
+			self:UnequipFood(foodType)
 		end
-
-		local inventory = selectInventory(player.Name)(store:getState())
-		local food = inventory[foodType]
-		if food.amount <= 0 or not food.equipped then
-			return
-		end
-
-		store:dispatch({
-			type = "inventory/foodUnequipped",
-			username = self.host.Name,
-			foodType = foodType,
-		})
 	end))
 
 	self.maid:giveTask(store.changed:connect(function(newState, oldState)
-		local newHunger = selectHunger(self.host.Name)(newState)
-		local oldHunger = selectHunger(self.host.Name)(oldState)
-
-		if newHunger ~= oldHunger then
-			self:HungerChanged(newHunger)
-		end
-
-		local newInventory = selectInventory(self.host.Name)(newState)
-		local oldInventory = selectInventory(self.host.Name)(oldState)
-
-		for foodType, food in pairs(newInventory) do
-			local newAmount = food.amount
-			local oldAmount = oldInventory[foodType] and oldInventory[foodType].amount or 0
-
-			local newEquipped = food.equipped
-			local oldEquipped = oldInventory[foodType] and oldInventory[foodType].equipped or false
-
-			if newAmount > oldAmount and oldAmount == 0 then
-				self:CreateTool(foodType)
-			elseif newAmount < oldAmount and newAmount == 0 then
-				self:DestroyTool(foodType)
-			end
-
-			if newEquipped and not oldEquipped then
-				self.humanoid:EquipTool(self.tools[foodType])
-			elseif not newEquipped and oldEquipped then
-				self.humanoid:UnequipTools()
-			end
-		end
+		self:StoreChanged(newState, oldState)
 	end))
-
-	self.lastHungerDeplete = os.clock()
 
 	store:dispatch({
 		type = "character/spawned",
@@ -158,6 +78,123 @@ function CharacterEntity.new(host: Player, model: Model, onDied: () -> nil)
 	})
 
 	return self
+end
+
+function CharacterEntity:OnPickupFood(_food: any)
+	if not t.instanceIsA("BasePart")(_food) or not _food:HasTag("food") then
+		return
+	end
+
+	local food = _food :: BasePart
+
+	local foodType = food.Name :: FoodTypes.FoodType
+
+	local foodPos = food.Position
+	local rootPos = self.rootPart.Position
+
+	if (foodPos - rootPos).Magnitude > 10 then
+		return
+	end
+
+	food:Destroy()
+
+	store:dispatch({
+		type = "inventory/foodAdded",
+		username = self.host.Name,
+		foodType = foodType,
+	})
+end
+
+function CharacterEntity:ConsumeFood(_foodType: any)
+	if not t.keyOf(foodSettings)(_foodType) then
+		return
+	end
+
+	local foodType = _foodType :: FoodTypes.FoodType
+
+	local inventory = selectInventory(self.host.Name)(store:getState())
+	local food = inventory[foodType]
+	if food.amount <= 0 or not food.equipped then
+		return
+	end
+
+	store:dispatch({
+		type = "inventory/foodConsumed",
+		username = self.host.Name,
+		foodType = foodType,
+	})
+end
+
+function CharacterEntity:EquipFood(_foodType: any)
+	if not t.keyOf(foodSettings)(_foodType) then
+		return
+	end
+
+	local foodType = _foodType :: FoodTypes.FoodType
+
+	local inventory = selectInventory(self.host.Name)(store:getState())
+	local food = inventory[foodType]
+	if food.amount <= 0 or food.equipped then
+		return
+	end
+
+	store:dispatch({
+		type = "inventory/foodEquipped",
+		username = self.host.Name,
+		foodType = foodType,
+	})
+end
+
+function CharacterEntity:UnequipFood(_foodType: any)
+	if not t.keyOf(foodSettings)(_foodType) then
+		return
+	end
+
+	local foodType = _foodType :: FoodTypes.FoodType
+
+	local inventory = selectInventory(self.host.Name)(store:getState())
+	local food = inventory[foodType]
+	if food.amount <= 0 or not food.equipped then
+		return
+	end
+
+	store:dispatch({
+		type = "inventory/foodUnequipped",
+		username = self.host.Name,
+		foodType = foodType,
+	})
+end
+
+function CharacterEntity:StoreChanged(newState: StateTypes.CommonState, oldState: StateTypes.CommonState)
+	local newHunger = selectHunger(self.host.Name)(newState)
+	local oldHunger = selectHunger(self.host.Name)(oldState)
+
+	if newHunger ~= oldHunger then
+		self:HungerChanged(newHunger)
+	end
+
+	local newInventory = selectInventory(self.host.Name)(newState)
+	local oldInventory = selectInventory(self.host.Name)(oldState)
+
+	for foodType, food in pairs(newInventory) do
+		local newAmount = food.amount
+		local oldAmount = oldInventory[foodType] and oldInventory[foodType].amount or 0
+
+		local newEquipped = food.equipped
+		local oldEquipped = oldInventory[foodType] and oldInventory[foodType].equipped or false
+
+		if newAmount > oldAmount and oldAmount == 0 then
+			self:CreateTool(foodType)
+		elseif newAmount < oldAmount and newAmount == 0 then
+			self:DestroyTool(foodType)
+		end
+
+		if newEquipped and not oldEquipped then
+			self.humanoid:EquipTool(self.tools[foodType])
+		elseif not newEquipped and oldEquipped then
+			self.humanoid:UnequipTools()
+		end
+	end
 end
 
 function CharacterEntity:CreateTool(foodType: FoodTypes.FoodType)
