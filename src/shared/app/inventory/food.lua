@@ -38,6 +38,7 @@ function Food(props: Props)
 		Size = UDim2.fromOffset(0, 50),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Text = `{settings.displayName} ({props.amount})`,
+		BackgroundColor3 = props.equipped and Color3.new(1, 1, 1) or Color3.fromRGB(163, 162, 165),
 		TextSize = 18,
 		TextWrapped = true,
 		Visible = props.amount > 0,
@@ -52,6 +53,17 @@ function Food(props: Props)
 				equipFoodEvent:FireServer(props.foodType)
 			end
 		end,
+	}, {
+		Tooltip = e("TextLabel", {
+			Text = "Click to Use",
+			BackgroundTransparency = 0.5,
+			Position = UDim2.new(0.5, 0, 0, -20),
+			AnchorPoint = Vector2.new(0.5, 1),
+			Size = UDim2.fromOffset(0, 20),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Visible = props.equipped,
+			TextSize = 14,
+		}),
 	})
 end
 
