@@ -1,4 +1,3 @@
-local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
@@ -35,6 +34,6 @@ function spawnFood()
 	part.Parent = Workspace
 end
 
-for i = 1, 100 do
+for _ = 1, 100 do
 	spawnFood()
 end
