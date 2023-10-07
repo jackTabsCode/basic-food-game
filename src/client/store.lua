@@ -8,6 +8,7 @@ local clientReducers = Rodux.combineReducers(sharedReducers)
 
 local store = Rodux.Store.new(clientReducers, nil, {
 	require(ReplicatedStorage.shared.middleware.logger),
+	require(ReplicatedStorage.shared.middleware.devTools),
 })
 
 return store
