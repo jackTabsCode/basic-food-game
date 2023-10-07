@@ -53,7 +53,7 @@ function CharacterEntity:HungerChanged(hunger: number)
 end
 
 function CharacterEntity:Heartbeat()
-	if not self.model or os.clock() - self.lastHungerDeplete < 0.1 then
+	if not self.model or os.clock() - self.lastHungerDeplete < 1 then
 		return
 	end
 
