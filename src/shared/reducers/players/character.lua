@@ -3,13 +3,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rodux = require(ReplicatedStorage.Packages.Rodux)
 local Sift = require(ReplicatedStorage.Packages.Sift)
 
+local ActionTypes = require(ReplicatedStorage.shared.types.actions)
 local StateTypes = require(ReplicatedStorage.shared.types.state)
-type CharacterState = StateTypes.CharacterState
 
-local Actions = require(ReplicatedStorage.shared.actions)
+local foodSettings = require(ReplicatedStorage.shared.settings.food)
 
-local needsReducer = Rodux.createReducer({}, {
-	["character/spawned"] = function(state: CharacterState, action: Actions.PlayerJoinedAction)
+local characterReducer = Rodux.createReducer({}, {
+	["character/spawned"] = function(state: StateTypes.CharacterState, action: ActionTypes.PlayerJoinedAction)
 		return Sift.Dictionary.merge(state, {
 			[action.username] = {
 				hunger = 100,
@@ -17,13 +17,13 @@ local needsReducer = Rodux.createReducer({}, {
 		})
 	end,
 
-	["character/died"] = function(state: CharacterState, action: Actions.PlayerLeftAction)
+	["character/died"] = function(state: StateTypes.CharacterState, action: ActionTypes.PlayerLeftAction)
 		return Sift.Dictionary.filter(state, function(_, key)
 			return key ~= action.username
 		end)
 	end,
 
-	["character/hungerDepleted"] = function(state: CharacterState, action: Actions.HungerDepletedAction)
+	["character/hungerDepleted"] = function(state: StateTypes.CharacterState, action: ActionTypes.HungerDepletedAction)
 		return Sift.Dictionary.map(state, function(value, key)
 			if key == action.username then
 				return {
@@ -34,11 +34,13 @@ local needsReducer = Rodux.createReducer({}, {
 		end)
 	end,
 
-	["character/hungerRegenerated"] = function(state: CharacterState, action: Actions.HungerRegeneratedAction)
+	["inventory/foodConsumed"] = function(state: StateTypes.CharacterState, action: ActionTypes.FoodConsumedAction)
+		local settings = foodSettings[action.foodType]
+
 		return Sift.Dictionary.map(state, function(value, key)
 			if key == action.username then
 				return {
-					hunger = value.hunger + action.amount,
+					hunger = math.min(100, value.hunger + settings.hunger),
 				}
 			end
 			return value
@@ -46,4 +48,4 @@ local needsReducer = Rodux.createReducer({}, {
 	end,
 })
 
-return needsReducer
+return characterReducer
