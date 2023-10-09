@@ -15,7 +15,6 @@ function devToolsMiddleware(nextDispatch, store)
 				end)),
 				state = store:getState(),
 			}
-			print(tab)
 			event:FireServer(tab)
 		end
 		return result
