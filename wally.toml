@@ -12,4 +12,3 @@ Rodux = "roblox/rodux@3.0.0"
 t = "osyrisrblx/t@3.0.0"
 Sift = "csqrl/sift@0.0.8"
 Maid = "chipioindustries/maid@1.0.1"
-Reflex = "littensy/reflex@4.2.2" # Just so I can use some handy selector APIs
