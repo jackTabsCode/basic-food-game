@@ -5,106 +5,106 @@ registry = "test"
 [[package]]
 name = "chipioindustries/maid"
 version = "1.0.1"
-dependencies = [["t", "osyrisrblx/t@3.0.0"]]
+dependencies = [["t", "osyrisrblx/t@3.1.1"]]
 
 [[package]]
 name = "csqrl/sift"
-version = "0.0.8"
-dependencies = []
-
-[[package]]
-name = "evaera/promise"
-version = "4.0.0"
+version = "0.0.9"
 dependencies = []
 
 [[package]]
 name = "jackc/cloudent-project"
 version = "0.1.0"
-dependencies = [["Maid", "chipioindustries/maid@1.0.1"], ["React", "jsdotlua/react@17.0.2"], ["ReactRoblox", "jsdotlua/react-roblox@17.0.2"], ["ReactRodux", "solarhorizon/react-rodux@0.2.2"], ["Rodux", "roblox/rodux@3.0.0"], ["Sift", "csqrl/sift@0.0.8"], ["t", "osyrisrblx/t@3.0.0"]]
+dependencies = [["Maid", "chipioindustries/maid@1.0.1"], ["React", "jsdotlua/react@17.2.1"], ["ReactRoblox", "jsdotlua/react-roblox@17.2.1"], ["ReactRodux", "solarhorizon/react-rodux@0.2.2"], ["Rodux", "roblox/rodux@3.0.0"], ["Sift", "csqrl/sift@0.0.9"], ["t", "osyrisrblx/t@3.1.1"]]
 
 [[package]]
 name = "jsdotlua/boolean"
-version = "1.2.3"
-dependencies = [["Number", "jsdotlua/number@1.2.3"]]
+version = "1.2.7"
+dependencies = [["number", "jsdotlua/number@1.2.7"]]
 
 [[package]]
 name = "jsdotlua/collections"
-version = "1.2.3"
-dependencies = [["ES7Types", "jsdotlua/es7-types@1.2.3"], ["InstanceOf", "jsdotlua/instance-of@1.2.3"]]
+version = "1.2.7"
+dependencies = [["es7-types", "jsdotlua/es7-types@1.2.7"], ["instance-of", "jsdotlua/instance-of@1.2.7"]]
 
 [[package]]
 name = "jsdotlua/console"
-version = "1.2.3"
-dependencies = [["Collections", "jsdotlua/collections@1.2.3"]]
+version = "1.2.7"
+dependencies = [["collections", "jsdotlua/collections@1.2.7"]]
 
 [[package]]
 name = "jsdotlua/es7-types"
-version = "1.2.3"
+version = "1.2.7"
 dependencies = []
 
 [[package]]
 name = "jsdotlua/instance-of"
-version = "1.2.3"
+version = "1.2.7"
 dependencies = []
 
 [[package]]
 name = "jsdotlua/luau-polyfill"
-version = "1.2.3"
-dependencies = [["Boolean", "jsdotlua/boolean@1.2.3"], ["Collections", "jsdotlua/collections@1.2.3"], ["Console", "jsdotlua/console@1.2.3"], ["ES7Types", "jsdotlua/es7-types@1.2.3"], ["InstanceOf", "jsdotlua/instance-of@1.2.3"], ["Math", "jsdotlua/math@1.2.3"], ["Number", "jsdotlua/number@1.2.3"], ["String", "jsdotlua/string@1.2.3"], ["Symbol", "jsdotlua/symbol@1.0.0"], ["Timers", "jsdotlua/timers@1.2.3"]]
+version = "1.2.7"
+dependencies = [["boolean", "jsdotlua/boolean@1.2.7"], ["collections", "jsdotlua/collections@1.2.7"], ["console", "jsdotlua/console@1.2.7"], ["es7-types", "jsdotlua/es7-types@1.2.7"], ["instance-of", "jsdotlua/instance-of@1.2.7"], ["math", "jsdotlua/math@1.2.7"], ["number", "jsdotlua/number@1.2.7"], ["string", "jsdotlua/string@1.2.7"], ["symbol-luau", "jsdotlua/symbol-luau@1.0.1"], ["timers", "jsdotlua/timers@1.2.7"]]
 
 [[package]]
 name = "jsdotlua/math"
-version = "1.2.3"
+version = "1.2.7"
 dependencies = []
 
 [[package]]
 name = "jsdotlua/number"
-version = "1.2.3"
+version = "1.2.7"
+dependencies = []
+
+[[package]]
+name = "jsdotlua/promise"
+version = "3.5.2"
 dependencies = []
 
 [[package]]
 name = "jsdotlua/react"
-version = "17.0.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"], ["Shared", "jsdotlua/shared@17.0.2"]]
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["shared", "jsdotlua/shared@17.2.1"]]
 
 [[package]]
 name = "jsdotlua/react-reconciler"
-version = "17.0.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"], ["Promise", "evaera/promise@4.0.0"], ["React", "jsdotlua/react@17.0.2"], ["Scheduler", "jsdotlua/scheduler@17.0.2"], ["Shared", "jsdotlua/shared@17.0.2"]]
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["promise", "jsdotlua/promise@3.5.2"], ["react", "jsdotlua/react@17.2.1"], ["scheduler", "jsdotlua/scheduler@17.2.1"], ["shared", "jsdotlua/shared@17.2.1"]]
 
 [[package]]
 name = "jsdotlua/react-roblox"
-version = "17.0.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"], ["React", "jsdotlua/react@17.0.2"], ["ReactReconciler", "jsdotlua/react-reconciler@17.0.2"], ["Scheduler", "jsdotlua/scheduler@17.0.2"], ["Shared", "jsdotlua/shared@17.0.2"]]
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["react", "jsdotlua/react@17.2.1"], ["react-reconciler", "jsdotlua/react-reconciler@17.2.1"], ["scheduler", "jsdotlua/scheduler@17.2.1"], ["shared", "jsdotlua/shared@17.2.1"]]
 
 [[package]]
 name = "jsdotlua/scheduler"
-version = "17.0.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"], ["Shared", "jsdotlua/shared@17.0.2"]]
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"], ["shared", "jsdotlua/shared@17.2.1"]]
 
 [[package]]
 name = "jsdotlua/shared"
-version = "17.0.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"]]
+version = "17.2.1"
+dependencies = [["luau-polyfill", "jsdotlua/luau-polyfill@1.2.7"]]
 
 [[package]]
 name = "jsdotlua/string"
-version = "1.2.3"
-dependencies = [["ES7Types", "jsdotlua/es7-types@1.2.3"], ["Number", "jsdotlua/number@1.2.3"]]
+version = "1.2.7"
+dependencies = [["es7-types", "jsdotlua/es7-types@1.2.7"], ["number", "jsdotlua/number@1.2.7"]]
 
 [[package]]
-name = "jsdotlua/symbol"
-version = "1.0.0"
+name = "jsdotlua/symbol-luau"
+version = "1.0.1"
 dependencies = []
 
 [[package]]
 name = "jsdotlua/timers"
-version = "1.2.3"
-dependencies = [["Collections", "jsdotlua/collections@1.2.3"]]
+version = "1.2.7"
+dependencies = [["collections", "jsdotlua/collections@1.2.7"]]
 
 [[package]]
 name = "osyrisrblx/t"
-version = "3.0.0"
+version = "3.1.1"
 dependencies = []
 
 [[package]]
@@ -120,4 +120,4 @@ dependencies = []
 [[package]]
 name = "solarhorizon/react-rodux"
 version = "0.2.2"
-dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.3"], ["React", "jsdotlua/react@17.0.2"], ["Rodux", "roblox/rodux@4.0.0-rc.0"]]
+dependencies = [["LuauPolyfill", "jsdotlua/luau-polyfill@1.2.7"], ["React", "jsdotlua/react@17.2.1"], ["Rodux", "roblox/rodux@4.0.0-rc.0"]]
