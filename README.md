@@ -7,6 +7,8 @@ To run the project, clone the repository, then run:
 ```bash
 aftman install
 wally install
+rojo sourcemap -o sourcemap.json
+wally-package-types Packages/ --sourcemap sourcemap.json
 rojo build -o "game.rbxl"
 ```
 
